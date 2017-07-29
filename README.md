@@ -2,7 +2,7 @@
 > display live data from grants api in an infographic format using d3.js
 
 ## Preview
-* [demo](http://htmlpreview.github.io/?https://github.com/KoalaMango/grants-infographics/blob/master/index.html)
+* [demo](https://grants-infographics-demo.netlify.com/)
 
 ## Resources
 
