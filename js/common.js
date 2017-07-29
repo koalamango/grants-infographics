@@ -1,7 +1,7 @@
 /*
  * 
  */
-(($) => {
+(function ($) {
 
   let apiURL = 'https://1kfs7evxca.execute-api.eu-west-1.amazonaws.com/beta/grants',
       grantsIssue,
