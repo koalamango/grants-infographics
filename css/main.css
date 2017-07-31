@@ -213,12 +213,17 @@ main {
 
 #dashboard {
   background-color: transparent; 
-  color: #000;
+  color: #1e1e1e;
   position: relative;
 }
 
+#dashboard .legend {
+  width: 100%;
+}
+
 .dashboard-pointer {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
+  padding: 0px;
+  width: 100%;
+  text-align: center;
+  color: #1e1e1e;
 }

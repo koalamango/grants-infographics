@@ -1,6 +1,9 @@
 /*
  * Basic D3 dashboard
- * Todo: get dual bars
+ * Todo: 
+ * - get dual bars
+ * - replace label text
+ * - label should add/remove when piechart update 
  */
 function dashboard(id, fData){
     var barColor = '#F49F00';
@@ -13,7 +16,7 @@ function dashboard(id, fData){
     // function to handle histogram.
     function histoGram(fD){
         var hG={},    hGDim = {t: 60, r: 0, b: 30, l: 0};
-        hGDim.w = 700 - hGDim.l - hGDim.r, 
+        hGDim.w = 600 - hGDim.l - hGDim.r, 
         hGDim.h = 250 - hGDim.t - hGDim.b;
             
         //create svg for histogram.
@@ -101,10 +104,10 @@ function dashboard(id, fData){
         }        
         return hG;
     }
-    
+
     // function to handle pieChart.
     function pieChart(pD){
-        var pC ={},    pieDim ={w:250, h: 250};
+        var pC ={},    pieDim ={w:200, h: 200};
         pieDim.r = Math.min(pieDim.w, pieDim.h) / 2;
                 
         // create svg for pie chart.
@@ -123,6 +126,26 @@ function dashboard(id, fData){
             .each(function(d) { this._current = d; })
             .style("fill", function(d) { return segColor(d.data.type); })
             .on("mouseover",mouseover).on("mouseout",mouseout);
+
+        piesvg.selectAll("text").data(pie(pD)).enter().append("text").attr("d", arc)
+            .attr("transform", function(d) {   
+              d.innerRadius = 0;
+              d.outerRadius = 800;
+              return "translate(" + arc.centroid(d) + ")";
+            })
+            .attr("text-anchor", "middle")
+            .style("font-size", "12px")
+            .style("fill", "#fff")                  
+            .text(function(d, i) { 
+
+              if (d.data.type == 'low') {
+                return 'UK';
+              } else if (d.data.type == 'mid') {
+                return 'Inl';
+              } 
+              return d.data.type; 
+            });
+ 
 
         // create function to update pie-chart. This will be used by histogram.
         pC.update = function(nD){
@@ -168,6 +191,7 @@ function dashboard(id, fData){
             
         // create the second column for each segment.
         tr.append("td").text(function(d){ 
+
           if (d.type == 'low') {
             return 'United Kingdom';
           } else if (d.type == 'mid') {
@@ -212,7 +236,9 @@ function dashboard(id, fData){
     // calculate total frequency by Issue for all segment.
     var sF = fData.map(function(d){return [d.Issue,d.total];});
 
-    var hG = histoGram(sF), // create the histogram.
-        pC = pieChart(tF), // create the pie-chart.
-        leg= legend(tF);  // create the legend.
+    var leg= legend(tF), // create the pie-chart.
+        hG = histoGram(sF), // create the histogram.
+        pC = pieChart(tF); // create the legend.
+         
+        
 }

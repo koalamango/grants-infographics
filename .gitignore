@@ -1,0 +1,56 @@
+# Compiled binary addons (http://nodejs.org/api/addons.html)
+build/Release
+
+# Users Environment Variables
+.lock-wscript
+
+# OS generated files #
+.DS_Store
+.DS_Store?
+.Spotlight-V100
+ehthumbs.db
+Icon?
+Thumbs.db
+
+.sass-cache
+Gemfile.lock
+
+# Linux temporary files
+*~
+
+# Node Files #
+/node_modules
+/bower_components
+npm-debug.log
+
+# Coverage #
+/coverage/
+.nyc_output/
+
+# ESLINT #
+.eslintcache
+.editorconfig
+
+# Typing #
+/src/typings/tsd/
+/typings/
+/tsd_typings/
+
+# IDEs #
+/.idea/
+.idea/
+*.swp/coverage
+R
+
+# Styleguide
+public/styleguide/
+
+# ignoring build files except gitkeep to keep the dir. itself
+public/build/*
+!public/build/.gitkeep
+
+# tests
+tests/visual/result/*
+tests/visual/reference/*
+tests/visual/html_report/*
+!tests/visual/result/.gitkeep
