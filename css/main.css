@@ -24,7 +24,7 @@ h2 {
   margin: 0;
 }
 div {
-  padding: .85rem 1rem;
+  
 }
 a {
   color: #133875;
@@ -174,6 +174,7 @@ main {
 }
 .grid {
   color: #fff;
+  padding: .85rem 1rem;
 }
 .grid:nth-of-type(1) {
   background: #247BA0;
@@ -215,15 +216,36 @@ main {
   background-color: transparent; 
   color: #1e1e1e;
   position: relative;
+  min-height: 335px;
 }
 
 #dashboard .legend {
   width: 100%;
 }
 
+
+@media (max-width: 34em) {
+  #dashboard svg {
+    width: 100% !important;
+  }
+}
 .dashboard-pointer {
   padding: 0px;
   width: 100%;
   text-align: center;
   color: #1e1e1e;
+}
+
+/* preloader */
+#spinner,
+#spinner2,
+#spinner3,
+#spinner4 {
+  position: relative;
+  min-height: 90px;
+}
+#spinner2 h2,
+#spinner3 h2,
+#spinner4 h2 {
+  display: none;
 }

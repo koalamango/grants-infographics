@@ -3,41 +3,64 @@
  */
 (function ($) {
 
-  let target = document.getElementById('dashboard'),
-      opts = {
-        lines: 9, 
-        length: 9,
-        width: 3, 
-        radius: 14, 
+  // preloader
+  let option = {
+        lines: 13, 
+        length: 30,
+        width: 2, 
+        radius: 35, 
+        opacity: 0.25,
+        scale: 1,
         color: '#247BA0',
         speed: 1.9,  
-        trail: 40,  
+        trail: 60,  
         className: 'spinner',  
-      }, 
-      spinner = new Spinner(opts).spin(target),
-      apiURL = 'https://1kfs7evxca.execute-api.eu-west-1.amazonaws.com/beta/grants',
+      },
+      option2 = {
+        lines: 13, 
+        length: 20,
+        width: 2, 
+        radius: 20, 
+        opacity: 0.25,
+        scale: 0.5,
+        color: '#fff',
+        speed: 1,  
+        trail: 55,  
+        className: 'spinner-small',  
+      },
+      spinner = new Spinner(option).spin(document.getElementById('dashboard')),
+      spinner2 = new Spinner(option2).spin(document.getElementById('spinner2')),
+      spinner3 = new Spinner(option2).spin(document.getElementById('spinner3')),
+      spinner4 = new Spinner(option2).spin(document.getElementById('spinner4'));
+
+  // api
+  let apiURL = 'https://1kfs7evxca.execute-api.eu-west-1.amazonaws.com/beta/grants',
       grantsIssue,
       freqData = [],
       grantsTotal = 0,
       ukTotal = 0;
 
+  $.getJSON( apiURL, function() {
 
-  $.getJSON( apiURL, function( data ) {
+    }).done(function(data) {
 
-    grantsIssue = data.data['facets'].issue
-    grantsProjects = data.data['pagination'].total
-    ukTotal = parseInt(data.data['facets'].country_name[0].total_awarded)
+      grantsIssue = data.data['facets'].issue
+      grantsProjects = data.data['pagination'].total
+      ukTotal = parseInt(data.data['facets'].country_name[0].total_awarded)
 
-    // Calulate overall awarded
-    for (var i = 0; i < grantsIssue.length; i++) {
-      grantsTotal += parseInt(grantsIssue[i].total_awarded) << 0;
-    } 
+      // Calulate overall awarded
+      for (var i = 0; i < grantsIssue.length; i++) {
+        grantsTotal += parseInt(grantsIssue[i].total_awarded) << 0;
+      } 
 
-    $('.grant_total').append('&pound;' + parseInt(grantsTotal/1000000))
-    $('.grant_projects').append( grantsProjects);
-    $('.grant_issues').append( grantsIssue.length);
-
-  });
+      $('.grant_total').append('&pound;' + parseInt(grantsTotal/1000000)).parent().show();
+      $('.grant_projects').append( grantsProjects).parent().show();
+      $('.grant_issues').append( grantsIssue.length).parent().show();
+      
+      spinner2.stop();
+      spinner3.stop();
+      spinner4.stop();
+    });
 
  // TODO: open issue on github for api to provide list, 
  //currently there isn't way to get list id dynamically
