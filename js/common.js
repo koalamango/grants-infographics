@@ -3,7 +3,19 @@
  */
 (function ($) {
 
-  let apiURL = 'https://1kfs7evxca.execute-api.eu-west-1.amazonaws.com/beta/grants',
+  let target = document.getElementById('dashboard'),
+      opts = {
+        lines: 9, 
+        length: 9,
+        width: 3, 
+        radius: 14, 
+        color: '#247BA0',
+        speed: 1.9,  
+        trail: 40,  
+        className: 'spinner',  
+      }, 
+      spinner = new Spinner(opts).spin(target),
+      apiURL = 'https://1kfs7evxca.execute-api.eu-west-1.amazonaws.com/beta/grants',
       grantsIssue,
       freqData = [],
       grantsTotal = 0,
@@ -64,6 +76,8 @@ function dashboardData(order, name, uk, inl, total) {
 
   // Temporary of dealing with aysnc issue
   if ( freqData.length == issueIDs.length) {
+    // remove spinner
+    spinner.stop();
     // call d3js
     dashboard('#dashboard',freqData);
   }
