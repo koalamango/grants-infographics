@@ -1,56 +1,23 @@
-# Compiled binary addons (http://nodejs.org/api/addons.html)
-build/Release
+# See https://help.github.com/ignore-files/ for more about ignoring files.
 
-# Users Environment Variables
-.lock-wscript
-
-# OS generated files #
-.DS_Store
-.DS_Store?
-.Spotlight-V100
-ehthumbs.db
-Icon?
-Thumbs.db
-
-.sass-cache
-Gemfile.lock
-
-# Linux temporary files
-*~
-
-# Node Files #
+# dependencies
 /node_modules
-/bower_components
-npm-debug.log
 
-# Coverage #
-/coverage/
-.nyc_output/
+# testing
+/coverage
 
-# ESLINT #
-.eslintcache
-.editorconfig
+# production
+/build
 
-# Typing #
-/src/typings/tsd/
-/typings/
-/tsd_typings/
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# IDEs #
-/.idea/
-.idea/
-*.swp/coverage
-R
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Styleguide
-public/styleguide/
-
-# ignoring build files except gitkeep to keep the dir. itself
-public/build/*
-!public/build/.gitkeep
-
-# tests
-tests/visual/result/*
-tests/visual/reference/*
-tests/visual/html_report/*
-!tests/visual/result/.gitkeep
+package-lock.json
