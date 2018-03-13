@@ -95,7 +95,7 @@ class App extends Component {
           </h2>
         </div>
         <div className="grid facts-4">
-          <h2>Over&nbsp
+          <h2>Over&nbsp;
             <span className="number">
               {location.length}
             </span> countries in the world!
