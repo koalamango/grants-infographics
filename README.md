@@ -1,10 +1,10 @@
-# Grants open data hackday prototype
+# Grants open data prototype - CR Hackday
 > display live data from grants api in an infographic format
 
-## Preview on Netlify
-* [demo](https://grants-infographics-demo.netlify.com/)
+## Demo
+* [https://grants-infographics-demo.netlify.com/](https://grants-infographics-demo.netlify.com/)
 
-![demo](src/images/grant_infographics.jpg?raw=true)
+![preview](src/images/grant_infographics.jpg?raw=true)
 
 ## Resources
 
