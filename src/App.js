@@ -113,6 +113,9 @@ class App extends Component {
           <p>Percentage of amount awarded</p>
         </div>
         <div className="grid footer">
+          <a href="https://grants-infographics-demo.netlify.com/">Home</a> |
+          <a href="https://github.com/KoalaMango/grants-infographics" target="_blank" rel="noopener noreferrer">Github</a> |
+          Author: Jessie Wang
         </div>
       </main>
     )
