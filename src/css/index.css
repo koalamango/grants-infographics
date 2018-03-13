@@ -1,5 +1,5 @@
 body {
-  background: #424242;
+  background: #284b63;
   font-family: 'Open Sans', sans-serif;
   font-size: 16px;
   letter-spacing: .03rem;
@@ -28,6 +28,8 @@ p {
   line-height: 1.5;
   color: #424242;
 }
+
+.grid span,
 .number {
   font-family: 'Bungee Shade', cursive;
   font-size: 3.5rem;
@@ -142,7 +144,7 @@ main {
 }
 
 .grid:nth-of-type(5) {
-  background: #3f8a52;
+  background: #7798AB;
 }
 
 .grid:nth-of-type(6) {
