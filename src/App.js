@@ -2,31 +2,25 @@ import React, { Component } from 'react'
 import Chart from './Chart'
 import Bar from './Bar'
 import logo from './images/logo.svg'
-import './css/react-vis.css'
 import RandomColor from 'randomcolor'
 
-const API_URL = "https://1kfs7evxca.execute-api.eu-west-1.amazonaws.com/beta/grants"
+const API_URL = "https://grants.sls.comicrelief.com/public/grants"
 
 class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      issue: [],
-      location: [],
-      awarded: '',
-      projects: '',
-      barData: [],
+      awarded: 0,
+      awardedTotal: 0,
+      category: 0,
       chartData1: [],
       chartData2: [],
+      country: 0,
+      projects: 0,
+      projectsTotal: 0,
+      barData: [],
     }
   }
-
-  sum(data){
-    // Todo: add map function (filter by property name)
-    const processed = data.reduce((a, b) => a + b, 0)
-    return processed
-  }
-
   componentDidMount() {
     fetch(API_URL)
       .then(response => {
@@ -38,48 +32,67 @@ class App extends Component {
         }
       })
       .then(response => {
-        const grantData = response.data.facets;
-        const awardedTotal = this.sum(grantData.issue.map(a => a.total_awarded))
-        const projectTotal = this.sum(grantData.issue.map(a => a.count))
-        let barData = [], chartData1 = [], chartData2 = []
 
-        grantData.issue.map(data => {
-          barData.push({ x: data.key, y: data.count})
+        let barData = [], chartData1 = [], chartData2 = [], category = [], country = [],
+            projectUK = 0, awardedUK = 0, awardedTotal = 0, catData = {}
+
+        const grantData = response.data.grants;
+        const projectTotal = response.data.pagination.total
+
+        // Process data
+        grantData.map(data => {
+          awardedTotal = awardedTotal + data.amount
+          if (data.partyCountryName === 'United Kingdom') {
+            projectUK++;
+            awardedUK = awardedUK + data.amount
+          }
+          if (data.partyCountryName && !country.includes(data.partyCountryName)) {
+            country.push(data.partyCountryName)
+          }
+          if (data.applicationScheme && !category.includes(data.applicationScheme)) {
+            category.push(data.applicationScheme)
+            catData[data.applicationScheme] = 0
+          } else {
+            catData[data.applicationScheme]++
+          }
+          return { awardedTotal, awardedUK, category, country, projectUK }
+        })
+
+        // Prepare the chart/bar|
+        const projects = Math.trunc((projectUK/projectTotal*100))
+        const awarded = Math.trunc(awardedUK/awardedTotal*100)
+
+        chartData1.push(
+          { theta: projects/10, color: RandomColor({hue: 'blue',luminosity: 'light'})},
+          { theta: 10 - projects/10, color: RandomColor({hue: 'purple',luminosity: 'light'})}
+        )
+
+        chartData2.push(
+          { theta: awarded/10, color: RandomColor({hue: 'red',luminosity: 'light'})},
+          { theta: 10 - awarded/10, color: RandomColor({hue: 'orange',luminosity: 'light'})}
+        )
+
+        Object.keys(catData).map((key, value) => {
+          barData.push({ x: key, y: value})
           return barData
         })
 
-        grantData.country_name.filter((r)=> {return r.key === 'UNITED KINGDOM'}).map(data =>{
-
-          const projects = Math.trunc((data.count/projectTotal*100))
-          const awarded = Math.trunc(data.total_awarded/awardedTotal*100)
-
-          chartData1.push(
-            { theta: projects/10, color: RandomColor({hue: 'blue',luminosity: 'light'}), label: 'United Kingdom', subLabel: projects + '%'},
-            { theta: 10 - projects/10, color: RandomColor({hue: 'purple',luminosity: 'light'}), label: 'International', subLabel: 100 - projects + '%'}
-          )
-
-          chartData2.push(
-            { theta: awarded/10, color: RandomColor({hue: 'red',luminosity: 'light'}), label: 'United Kingdom', subLabel: awarded + '%'},
-            { theta: 10 - awarded/10, color: RandomColor({hue: 'orange',luminosity: 'light'}), label: 'International', subLabel: 100 - awarded + '%'}
-          )
-
-          return { chartData1, chartData2 }
-        })
-
         this.setState({
-          issue: grantData.issue,
-          location: grantData.country_name,
-          awarded: awardedTotal,
-          projects: projectTotal,
-          barData: barData,
+          awarded: awarded,
+          awardedTotal: awardedTotal,
+          category: category.length,
           chartData1: chartData1,
           chartData2: chartData2,
+          country: country.length,
+          projects: projects,
+          projectTotal: projectTotal,
+          barData: barData,
         })
       }
   )}
 
   render() {
-    const { issue, location, barData, awarded, projects, chartData1, chartData2 } = this.state
+    const { awarded, awardedTotal, barData, category, chartData1, chartData2, country, projects, projectTotal } = this.state
 
     return (
       <main>
@@ -90,22 +103,22 @@ class App extends Component {
         </div>
         <div className="grid facts-1">
           <h2>
-            Awarded<br/><span>{Math.trunc(awarded/1000000)}</span>+ millions
+            Awarded<br/><span>{Math.trunc(awardedTotal/1000000)}</span>+ millions
           </h2>
         </div>
         <div className="grid facts-2">
           <h2>
-            <span>{projects}</span><br/>active projects
+            <span>{projectTotal}</span><br/>active projects
           </h2>
         </div>
         <div className="grid facts-3">
           <h2>
-            <span> {issue.length}</span> categories
+            <span>{category}</span> schemes
           </h2>
         </div>
         <div className="grid facts-4">
           <h2>
-            Over <span>{location.length}</span> countries in the world!
+            Over <span>{country}</span> countries in the world!
           </h2>
         </div>
         <div className="grid bar">
@@ -113,12 +126,19 @@ class App extends Component {
         </div>
         <div className="grid chart-1">
           <Chart chartData={chartData1}/>
-          <p>Percentage of active projects</p>
+          <p>
+            Percentage of active projects<br/>
+            UK: {projects}% , International: {100 - projects}%
+          </p>
         </div>
         <div className="grid chart-2">
           <Chart chartData={chartData2} innerRadius='80'/>
-          <p>Percentage of amount awarded</p>
+          <p>
+            Percentage of amount awarded<br/>
+            UK: {awarded}% , International: {100 - awarded}%
+          </p>
         </div>
+
         <div className="grid footer">
           <a href="https://grants-infographics-demo.netlify.com/">Home</a> |
           <a href="https://github.com/KoalaMango/grants-infographics" target="_blank" rel="noopener noreferrer">Github</a> |
